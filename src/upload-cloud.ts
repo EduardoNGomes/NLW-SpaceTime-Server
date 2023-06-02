@@ -1,14 +1,11 @@
-// import { env } from './env'
-import { config } from 'dotenv'
+import { env } from './env'
 
 import { v2 as cloudinary } from 'cloudinary'
 
-config()
-
 cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
+  cloud_name: env.CLOUD_NAME,
+  api_key: env.API_KEY,
+  api_secret: env.API_SECRET,
 })
 
 cloudinary.uploader
