@@ -1,9 +1,10 @@
 import { FastifyInstance } from 'fastify'
 import { randomUUID } from 'node:crypto'
-import { createWriteStream } from 'node:fs'
+import { createWriteStream, unlinkSync } from 'node:fs'
 import { extname, resolve } from 'node:path'
 import { pipeline } from 'node:stream'
 import { promisify } from 'node:util'
+import { createImageUrl } from '../utils/upload-cloud'
 
 const pump = promisify(pipeline)
 
@@ -14,37 +15,28 @@ export async function uploadRoutes(app: FastifyInstance) {
         fieldSize: 5_242_880, // 5mb
       },
     })
-
     if (!upload) {
       return reply.status(400).send()
     }
-
     const mimetypeRegex = /^(image|video)\/[a-zA-Z]+/
-
     const isValidFileFormat = mimetypeRegex.test(upload.mimetype)
-
     if (!isValidFileFormat) {
       return reply.status(400).send()
     }
-
     const fileId = randomUUID()
-
     const extension = extname(upload.filename)
-    console.log(extension)
-
     const fileName = fileId.concat(extension)
-    console.log(fileName)
-
     const writeStream = createWriteStream(
       resolve(__dirname, '../../uploads', fileName),
     )
-
     await pump(upload.file, writeStream)
 
-    const fullUrl = request.protocol.concat('://').concat(request.hostname)
-    console.log(fullUrl)
-    const fileUrl = new URL(`uploads/${fileName}`, fullUrl).toString()
+    const response = await createImageUrl(
+      resolve(__dirname, '../../uploads', fileName),
+    )
 
-    return { fileUrl }
+    unlinkSync(resolve(__dirname, '../../uploads', fileName))
+
+    return { fileUrl: response?.url }
   })
 }
