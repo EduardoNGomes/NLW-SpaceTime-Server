@@ -30,7 +30,6 @@ export async function uploadRoutes(app: FastifyInstance) {
       resolve(__dirname, '../uploads', fileName),
     )
     await pump(upload.file, writeStream)
-
     const response = await createImageUrl(
       resolve(__dirname, '../uploads', fileName),
     )
