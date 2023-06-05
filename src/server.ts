@@ -3,15 +3,10 @@ import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
 import { memoriesRoutes } from './routes/memories'
 import { authRoutes } from './routes/auth'
-import multipart from '@fastify/multipart'
 import { uploadRoutes } from './routes/upload'
 import { resolve } from 'path'
 import { env } from './env'
 import multer from 'fastify-multer'
-export const upload = multer({
-  storage: multer.diskStorage({}),
-  limits: { fileSize: 500000 },
-})
 
 const app = fastify()
 
@@ -19,7 +14,6 @@ app.register(cors, {
   origin: true,
 })
 
-// app.register(multipart)
 app.register(multer.contentParser)
 
 app.register(jwt, {
