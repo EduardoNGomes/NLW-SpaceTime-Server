@@ -7,6 +7,7 @@ import { uploadRoutes } from './routes/upload'
 import { resolve } from 'path'
 import { env } from './env'
 import multer from 'fastify-multer'
+import { publicRoutes } from './routes/public'
 
 const app = fastify()
 
@@ -28,6 +29,7 @@ app.register(require('@fastify/static'), {
 app.register(authRoutes)
 app.register(uploadRoutes)
 app.register(memoriesRoutes)
+app.register(publicRoutes)
 
 app
   .listen({
