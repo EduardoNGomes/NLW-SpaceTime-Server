@@ -7,7 +7,6 @@ export async function uploadRoutes(app: FastifyInstance) {
     '/upload',
     { preHandler: upload.single('cover') },
     async (request, reply) => {
-      console.log('oi')
       const imageFile = request.file
       if (!upload) {
         return reply.status(400).send()

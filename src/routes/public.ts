@@ -23,7 +23,7 @@ export async function publicRoutes(app: FastifyInstance) {
         coverUrl: memory.coverUrl,
         excerpt: memory.content.substring(0, 115).concat('...'),
         createdAt: memory.createdAt,
-        user: memory.user.name,
+        author: memory.user.name,
       }
     })
   })
